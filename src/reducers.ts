@@ -1,8 +1,8 @@
-import { combineReducers } from "redux"
-import { ActionType, Team, Result, Axis, Metric, Page } from "./actions"
-import { Map, List } from "immutable"
+import { combineReducers, Action } from "redux"
+import { ActionType, Team, Result, Axis, Metric, Page, UiState,
+         initialUiState, Data } from "./data_model"
 
-function rawData(state = {}, action: any) {
+function rawData(state: Data = {}, action: Action) {
   switch (action.type) {
     case ActionType.SetRawData:
       return action.data
@@ -11,41 +11,11 @@ function rawData(state = {}, action: any) {
   }
 }
 
-const initialUiState = Map({
-  activePage: Page.Dashboard,
-  edit: Map({
-    [Team.A]: List(),
-    [Team.B]: List(),
-    result: Result.TeamAWon,
-    date: new Date()
-  }),
-  dashboard: Map({
-    [Axis.X]: Map({
-      metric: Metric.Time,
-      windows: false,
-      windowSize: 6,
-      equalTeams: false,
-      teamSize: 4,
-      recentGames: false,
-      recentGameCount: 10
-    }),
-    [Axis.Y]: Map({
-      metric: Metric.EloRating,
-      windows: false,
-      windowSize: 6,
-      equalTeams: false,
-      teamSize: 4,
-      recentGames: false,
-      recentGameCount: 10
-    })
-  })
-})
-
-function toggle(state: any, axis: Axis, option: string) {
+function toggle(state: UiState, axis: Axis, option: string) {
   return state.updateIn(["dashboard", axis, option], (s: boolean) => !s);
 }
 
-function uiState(state = initialUiState, action: any) {
+function uiState(state = initialUiState, action: Action) {
   switch (action.type) {
     case ActionType.AddToTeam:
       return state.updateIn(["edit", action.team], list => list.push(action.name));

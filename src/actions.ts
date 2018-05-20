@@ -1,50 +1,6 @@
 import { init, onDataChange } from "./firebase"
+import { ActionType, Team, Result, Axis, Metric, Page, Data } from "./data-model"
 import { Dispatch } from "redux"
-
-export enum ActionType {
-  AddToTeam,
-  SetResult,
-  SetDate,
-  Save,
-  SetMetric,
-  ToggleWindows,
-  SetWindowSize,
-  ToggleEqualTeams,
-  SetTeamSize,
-  ToggleRecentGames,
-  SetRecentGameCount,
-  Navigate,
-  Login,
-  SetRawData,
-}
-
-export enum Team {
-  A = "team-a",
-  B = "team-b",
-}
-
-export enum Result {
-  TeamAWon = "team-a-won",
-  TeamBWon = "team-b-won",
-  Draw = "draw",
-}
-
-export enum Axis {
-  X,
-  Y,
-}
-
-export enum Metric {
-  WinRate,
-  EloRating,
-  Time,
-}
-
-export enum Page {
-  Dashboard,
-  Edit,
-  List,
-}
 
 export const addToTeam = (team: Team, name: string) => ({
   type: ActionType.AddToTeam,
@@ -108,13 +64,13 @@ export const navigate = (page: Page) => ({
   page: page
 })
 
-const setRawData = (data: any) => ({
+const setRawData = (data: Data) => ({
   type: ActionType.SetRawData,
   data: data
 })
 
 export function setupFirebaseConnection() {
-  return function(dispatch: Dispatch) {
+  return function(dispatch: Dispatch<ReturnType<typeof setRawData>>) {
     init();
     onDataChange(data => dispatch(setRawData(data)));
   }

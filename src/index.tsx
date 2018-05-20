@@ -6,6 +6,15 @@ import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import rootReducer from "./reducers";
 import { setupFirebaseConnection } from "./actions";
+import Games from "./game-list";
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import blue from '@material-ui/core/colors/blue';
+
+const theme = createMuiTheme({
+  palette: {
+    primary: blue,
+  },
+});
 
 const store = createStore(
   rootReducer,
@@ -16,8 +25,11 @@ const store = createStore(
 
 store.dispatch(setupFirebaseConnection());
 
-
 ReactDOM.render(
-    <div>Hello bello!</div>,
-    document.getElementById("app")
+  <MuiThemeProvider theme={theme}>
+    <Provider store={store}>
+      <Games/>
+    </Provider>
+  </MuiThemeProvider>,
+  document.getElementById("app")
 );

@@ -1,4 +1,5 @@
 import * as firebase from "firebase"
+import { Data } from "./data-model"
 
 const config = {
   apiKey: "AIzaSyC3J1d0aIsil-MVtWbDNzVVGXO0tPrnQgw",
@@ -19,7 +20,7 @@ export function init() {
   });
 }
 
-export function onDataChange(fn: (data: any) => void) {
+export function onDataChange(fn: (data: Data) => void) {
   const db = firebase.database();
   const results = db.ref("/results");
   results.on("value", snapshot => fn(snapshot.val()));
