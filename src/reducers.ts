@@ -37,6 +37,8 @@ function uiState(state = initialUiState, action: Action) {
       return toggle(state, action.axis, "recentGames");
     case ActionType.SetRecentGameCount:
       return state.setIn(["dashboard", action.axis, "recentGameCount"], action.count);
+    case ActionType.Navigate:
+      return state.set("activePage", action.page);
     default:
       return state;
   }

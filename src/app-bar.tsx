@@ -4,7 +4,13 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import Icon from '@material-ui/core/Icon';
+import Drawer from '@material-ui/core/Drawer';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
 import { Page, UiState } from './data-model';
+import {navigate } from './actions';
 import { connect } from 'react-redux';
 
 const styles = {
@@ -20,21 +26,49 @@ const styles = {
   },
 };
 
+class PageItem extends React.Component {
+  constructor(props: { icon: string, page: Page, onClick: (page: Page) => void }) {
+    super(props);
+  }
+
+  onClick() {
+    this.props.onClick(this.props.page);
+  }
+
+  render() {
+    return (
+      <ListItem button onClick={this.onClick.bind(this)}>
+        <ListItemIcon>
+          <Icon>{this.props.icon}</Icon>
+        </ListItemIcon>
+        <ListItemText primary={this.props.page}/>
+      </ListItem>
+    );
+  }
+}
+
 class Header extends React.Component {
   constructor(props: { activePage: Page, onSelect: (newPage: Page) => void}) {
     super(props);
     this.state = { open: false };
+    this.toggleMenu = this.toggleMenu.bind(this);
+    this.closeDrawer = this.closeDrawer.bind(this);
+    this.selectPage = this.selectPage.bind(this);
   }
 
-  menuClick() {
+  toggleMenu() {
     this.setState((prevState) => {
-      console.log(!prevState.open);
       return { open: !prevState.open }
     })
   }
 
-  click(page: Page) {
-    this.setState({ open: false });
+  closeDrawer() {
+    this.setState({ open: false});
+  }
+
+  selectPage(page: Page) {
+    this.props.onSelect(page);
+    this.closeDrawer();
   }
 
   render() {
@@ -43,7 +77,7 @@ class Header extends React.Component {
         <AppBar position="static">
           <Toolbar>
             <IconButton style={styles.menuButton} color="inherit" aria-label="Menu"
-                        onClick={this.menuClick.bind(this)}>
+                        onClick={this.toggleMenu}>
               <Icon>menu</Icon>
             </IconButton>
             <Typography variant="title" color="inherit" style={styles.flex}>
@@ -51,6 +85,18 @@ class Header extends React.Component {
             </Typography>
           </Toolbar>
         </AppBar>
+        <Drawer anchor="left" open={this.state.open} onClick={this.closeDrawer}>
+          <div tabIndex={0}
+               role="button"
+               onClick={this.closeDrawer}
+               onKeyDown={this.closeDrawer}>
+            <List>
+              <PageItem icon="equalizer" page={Page.Dashboard} onClick={this.selectPage}/>
+              <PageItem icon="add circle" page={Page.Edit} onClick={this.selectPage}/>
+              <PageItem icon="list" page={Page.List} onClick={this.selectPage}/>
+            </List>
+          </div>
+        </Drawer>
       </div>
     );
   }
@@ -58,5 +104,5 @@ class Header extends React.Component {
 
 export default connect(
   (state: { uiState: UiState }) => ({ activePage: (state.uiState.get('activePage') as Page) }),
-  (dispatch) => ({ onSelect: (newPage: Page) => console.log(newPage) })
+  (dispatch) => ({ onSelect: (newPage: Page) => dispatch(navigate(newPage)) })
 )(Header);
