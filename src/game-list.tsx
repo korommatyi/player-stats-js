@@ -45,9 +45,11 @@ const Games = ({ rawData }: { rawData: Data }) => (
         </TableRow>
       </TableHead>
       <TableBody>
-        {Object.entries(rawData).sort(reverseDateSorter).map(([k, v]: [number, Record]) => (
-          <Row key={k} r={v}/>
-        ))}
+        {(Object.entries(rawData) as [number, Record][])
+          .sort(reverseDateSorter)
+          .map(([k, v]: [number, Record]) => (
+            <Row key={k} r={v}/>
+          ))}
       </TableBody>
     </Table>
   </Paper>

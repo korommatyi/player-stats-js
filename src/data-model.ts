@@ -40,9 +40,9 @@ export enum Metric {
 }
 
 export enum Page {
-  Dashboard,
-  Edit,
-  List,
+  Dashboard = 'Dashboard',
+  Edit = 'New Game',
+  List = 'Games',
 }
 
 export interface Record {

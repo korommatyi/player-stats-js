@@ -7,6 +7,7 @@ import { createLogger } from 'redux-logger';
 import rootReducer from "./reducers";
 import { setupFirebaseConnection } from "./actions";
 import Games from "./game-list";
+import AppBar from "./app-bar";
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 
@@ -28,7 +29,10 @@ store.dispatch(setupFirebaseConnection());
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <Provider store={store}>
-      <Games/>
+      <div>
+        <AppBar/>
+        <Games/>
+      </div>
     </Provider>
   </MuiThemeProvider>,
   document.getElementById("app")
