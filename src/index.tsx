@@ -8,6 +8,7 @@ import rootReducer from "./reducers";
 import { setupFirebaseConnection } from "./actions";
 import Games from "./game-list";
 import AppBar from "./app-bar";
+import Dashboard from "./dashboard";
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { Page, UiState } from "./data-model";
@@ -32,7 +33,7 @@ const Pages = connect(
 )(({ activePage }: { activePage: Page }) => {
   switch (activePage) {
     case Page.Dashboard:
-      return <div/>
+      return <Dashboard/>
     case Page.Edit:
       return <div/>
     case Page.List:
