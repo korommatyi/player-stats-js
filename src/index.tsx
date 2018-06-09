@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { Provider } from "react-redux";
+import { Provider, connect } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
@@ -10,6 +10,7 @@ import Games from "./game-list";
 import AppBar from "./app-bar";
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
+import { Page, UiState } from "./data-model";
 
 const theme = createMuiTheme({
   palette: {
@@ -26,12 +27,26 @@ const store = createStore(
 
 store.dispatch(setupFirebaseConnection());
 
+const Pages = connect(
+  (state: { uiState: UiState }) => ({ activePage: state.uiState.get('activePage') as Page })
+)(({ activePage }: { activePage: Page }) => {
+  switch (activePage) {
+    case Page.Dashboard:
+      return <div/>
+    case Page.Edit:
+      return <div/>
+    case Page.List:
+      return <Games/>
+    default:
+      return <div/>
+  }});
+
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <Provider store={store}>
       <div>
         <AppBar/>
-        <Games/>
+        <Pages/>
       </div>
     </Provider>
   </MuiThemeProvider>,
