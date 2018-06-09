@@ -26,8 +26,14 @@ const styles = {
   },
 };
 
-class PageItem extends React.Component {
-  constructor(props: { icon: string, page: Page, onClick: (page: Page) => void }) {
+interface IPageItemProps extends React.ClassAttributes<PageItem> {
+  icon: string,
+  page: Page,
+  onClick: (page: Page) => void,
+}
+
+class PageItem extends React.Component<IPageItemProps, {}> {
+  constructor(props: IPageItemProps) {
     super(props);
   }
 
@@ -47,8 +53,13 @@ class PageItem extends React.Component {
   }
 }
 
-class Header extends React.Component {
-  constructor(props: { activePage: Page, onSelect: (newPage: Page) => void}) {
+interface IHeaderProps extends React.ClassAttributes<Header> {
+  activePage: Page,
+  onSelect: (newPage: Page) => void,
+}
+
+class Header extends React.Component<IHeaderProps, { open: boolean }> {
+  constructor(props: IHeaderProps) {
     super(props);
     this.state = { open: false };
     this.toggleMenu = this.toggleMenu.bind(this);
