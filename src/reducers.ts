@@ -1,6 +1,7 @@
-import { combineReducers, Action } from "redux"
+import { combineReducers } from "redux"
 import { ActionType, Team, Result, Axis, Metric, Page, UiState,
          initialUiState, Data } from "./data-model"
+import { Action } from './actions'
 
 function rawData(state: Data = {}, action: Action) {
   switch (action.type) {
