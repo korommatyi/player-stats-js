@@ -1,9 +1,11 @@
 import { combineReducers } from "redux"
 import { ActionType, Team, Result, Axis, Metric, Page, UiState,
-         initialUiState, Data } from "./data-model"
+         initialUiState, Data, Record } from "./data-model"
 import { Action } from './actions'
 
-function rawData(state: Data = {}, action: Action) {
+const empty = new Map<number, Record>();
+
+function rawData(state: Data = empty, action: Action) {
   switch (action.type) {
     case ActionType.SetRawData:
       return action.data

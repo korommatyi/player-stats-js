@@ -1,4 +1,4 @@
-import { Map, List } from "immutable"
+import { Map as IMap, List } from "immutable"
 
 export enum ActionType {
   AddToTeam,
@@ -34,9 +34,9 @@ export enum Axis {
 }
 
 export enum Metric {
-  WinRate,
-  EloRating,
-  Time,
+  WinRate = "Win rate",
+  EloRating = "Elo rating",
+  Time = "Time",
 }
 
 export enum Page {
@@ -52,36 +52,38 @@ export interface Record {
   [Team.B]: string[]
 }
 
-export interface Data {
-  [key: number]: Record
+export type Data = Map<number, Record>;
+
+export enum Filter {
+  Equal = 'Teams of eqal size',
+  FourVsFour = '4 vs. 4',
+  ThreeVsThree = '3 vs. 3',
 }
 
-export const initialUiState = Map({
+export const initialUiState = IMap({
   activePage: Page.Dashboard,
-  edit: Map({
+  edit: IMap({
     [Team.A]: List(),
     [Team.B]: List(),
     result: Result.TeamAWon,
     date: new Date()
   }),
-  dashboard: Map({
-    [Axis.X]: Map({
+  dashboard: IMap({
+    [Axis.X]: IMap({
       metric: Metric.Time,
       windows: false,
       windowSize: 6,
-      equalTeams: false,
-      teamSize: 4,
+      filter: true,
+      filterValue: Filter.Equal,
       recentGames: false,
       recentGameCount: 10
     }),
-    [Axis.Y]: Map({
+    [Axis.Y]: IMap({
       metric: Metric.EloRating,
       windows: false,
       windowSize: 6,
-      equalTeams: false,
-      teamSize: 4,
-      recentGames: false,
-      recentGameCount: 10
+      filter: true,
+      filterValue: Filter.Equal
     })
   })
 });
