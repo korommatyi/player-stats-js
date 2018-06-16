@@ -26,7 +26,7 @@ const store = createStore(
   )
 );
 
-store.dispatch(setupFirebaseConnection());
+store.dispatch<any>(setupFirebaseConnection());
 
 const Pages = connect(
   (state: { uiState: UiState }) => ({ activePage: state.uiState.get('activePage') as Page })

@@ -26,14 +26,14 @@ const styles = {
   },
 };
 
-interface IPageItemProps extends React.ClassAttributes<PageItem> {
+interface PageItemProps {
   icon: string,
   page: Page,
   onClick: (page: Page) => void,
 }
 
-class PageItem extends React.Component<IPageItemProps, {}> {
-  constructor(props: IPageItemProps) {
+class PageItem extends React.Component<PageItemProps, {}> {
+  constructor(props: PageItemProps) {
     super(props);
   }
 
@@ -53,13 +53,22 @@ class PageItem extends React.Component<IPageItemProps, {}> {
   }
 }
 
-interface IHeaderProps extends React.ClassAttributes<Header> {
+interface HeaderStateProps {
   activePage: Page,
+}
+
+interface HeaderDispatchProps {
   onSelect: (newPage: Page) => void,
 }
 
-class Header extends React.Component<IHeaderProps, { open: boolean }> {
-  constructor(props: IHeaderProps) {
+type HeaderProps = HeaderStateProps & HeaderDispatchProps;
+
+interface HeaderState {
+  open: boolean
+}
+
+class Header extends React.Component<HeaderProps, HeaderState> {
+  constructor(props: HeaderProps) {
     super(props);
     this.state = { open: false };
     this.toggleMenu = this.toggleMenu.bind(this);
@@ -113,7 +122,7 @@ class Header extends React.Component<IHeaderProps, { open: boolean }> {
   }
 }
 
-export default connect(
+export default connect<HeaderStateProps, HeaderDispatchProps>(
   (state: { uiState: UiState }) => ({ activePage: (state.uiState.get('activePage') as Page) }),
   (dispatch) => ({ onSelect: (newPage: Page) => dispatch(navigate(newPage)) })
 )(Header);
