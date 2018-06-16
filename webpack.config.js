@@ -1,10 +1,12 @@
 const webpack = require('webpack');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 module.exports = {
   entry: "./src/index.tsx",
   output: {
     filename: "bundle.js",
-    path: __dirname + "/dist"
+    path: path.resolve(__dirname, "dist"),
   },
   mode: "development",
 
@@ -12,8 +14,7 @@ module.exports = {
   devtool: "source-map",
 
   devServer: {
-    publicPath: './dist',
-    index: './index.html',
+    contentBase: './dist',
     hot: true
   },
   
@@ -33,6 +34,11 @@ module.exports = {
 
   plugins: [
     new webpack.NamedModulesPlugin(),
+    new HtmlWebpackPlugin({
+      template: path.resolve(__dirname, 'index.html'),
+      filename: 'index.html',
+      inject: 'body'
+    }),
     new webpack.HotModuleReplacementPlugin()
   ]
 };
