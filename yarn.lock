@@ -151,6 +151,10 @@
     scroll "^2.0.3"
     warning "^4.0.1"
 
+"@types/chart.js@^2.7.22":
+  version "2.7.22"
+  resolved "https://registry.yarnpkg.com/@types/chart.js/-/chart.js-2.7.22.tgz#1a6d695362d4368ad7f4e79f0249f9c6fa05dac1"
+
 "@types/jss@^9.5.3":
   version "9.5.3"
   resolved "https://registry.yarnpkg.com/@types/jss/-/jss-9.5.3.tgz#0c106de3fe0b324cd4173fac7dab26c12cda624e"

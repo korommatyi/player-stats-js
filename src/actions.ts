@@ -1,5 +1,5 @@
 import { init, onDataChange } from "./firebase"
-import { ActionType, Team, Result, Axis, Metric, Page, Data } from "./data-model"
+import { ActionType, Team, Result, Axis, Metric, Page, Data, Filter } from "./data-model"
 import { Dispatch } from "redux"
 
 export const addToTeam = (team: Team, name: string) => ({
@@ -32,9 +32,10 @@ export const setMetric = (axis: Axis, metric: Metric) => ({
 
 type SetMetric = ReturnType<typeof setMetric>;
 
-export const toggleWindows = (axis: Axis) => ({
+export const toggleWindows = (axis: Axis, state: boolean) => ({
   type: ActionType.ToggleWindows as ActionType.ToggleWindows,
-  axis: axis
+  axis: axis,
+  state: state
 })
 
 type ToggleWindows = ReturnType<typeof toggleWindows>;
@@ -47,28 +48,30 @@ export const setWindowSize = (axis: Axis, size: number) => ({
 
 type SetWindowSize = ReturnType<typeof setWindowSize>;
 
-export const toggleEqualTeams = (axis: Axis) => ({
-  type: ActionType.ToggleEqualTeams as ActionType.ToggleEqualTeams,
-  axis: axis
-})
-
-type ToggleEqualTeams = ReturnType<typeof toggleEqualTeams>;
-
-export const setTeamSize = (axis: Axis, size: number) => ({
-  type: ActionType.SetTeamSize as ActionType.SetTeamSize,
+export const toggleFilter = (axis: Axis, state: boolean) => ({
+  type: ActionType.ToggleFilter as ActionType.ToggleFilter,
   axis: axis,
-  size: size
+  state: state
 })
 
-type SetTeamSize = ReturnType<typeof setTeamSize>;
+type ToggleFilter = ReturnType<typeof toggleFilter>;
+
+export const setFilter = (axis: Axis, filter: Filter) => ({
+  type: ActionType.SetFilter as ActionType.SetFilter,
+  axis: axis,
+  filter: filter
+})
+
+type SetFilter = ReturnType<typeof setFilter>;
 
 export const save = () => ({ type: ActionType.Save as ActionType.Save })
 
 type Save = ReturnType<typeof save>;
 
-export const toggleRecentGames = (axis: Axis) => ({
+export const toggleRecentGames = (axis: Axis, state: boolean) => ({
   type: ActionType.ToggleRecentGames as ActionType.ToggleRecentGames,
-  axis: axis
+  axis: axis,
+  state: state
 })
 
 type ToggleRecentGames = ReturnType<typeof toggleRecentGames>;
@@ -96,7 +99,7 @@ const setRawData = (data: Data) => ({
 type SetRawData = ReturnType<typeof setRawData>;
 
 export type Action = AddToTeam | SetResult | SetDate | SetMetric | ToggleWindows | SetWindowSize |
-                     ToggleEqualTeams | SetTeamSize | Save | ToggleRecentGames | SetRecentGameCount |
+                     ToggleFilter | SetFilter | Save | ToggleRecentGames | SetRecentGameCount |
                      Navigate | SetRawData;
 
 export function setupFirebaseConnection() {

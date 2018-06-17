@@ -123,6 +123,6 @@ class Header extends React.Component<HeaderProps, HeaderState> {
 }
 
 export default connect<HeaderStateProps, HeaderDispatchProps>(
-  (state: { uiState: UiState }) => ({ activePage: (state.uiState.get('activePage') as Page) }),
+  (state: { uiState: UiState }) => ({ activePage: (state.uiState.activePage) }),
   (dispatch) => ({ onSelect: (newPage: Page) => dispatch(navigate(newPage)) })
 )(Header);

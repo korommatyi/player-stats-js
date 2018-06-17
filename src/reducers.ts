@@ -14,34 +14,53 @@ function rawData(state: Data = empty, action: Action) {
   }
 }
 
-function toggle(state: UiState, axis: Axis, option: string) {
-  return state.updateIn(["dashboard", axis, option], (s: boolean) => !s);
+function updateDashboard<T>(state: UiState, axis: Axis, attr: string, value: T) {
+  const axisState = Object.assign({}, state.dashboard[axis], { [attr]: value });
+  const dashboard = Object.assign({}, state.dashboard, { [axis]: axisState });
+  return Object.assign({}, state, { dashboard: dashboard });
 }
+
+function addToTeam(state: UiState, team: Team, name: string) {
+  const teamState = state.edit[team].push(name);
+  const edit = Object.assign({}, state.edit, { [team]: teamState });
+  return Object.assign({}, state, { edit: edit });
+}
+
+function setResult(state: UiState, result: Result) {
+  const edit = Object.assign({}, state.edit, { result: result });
+  return Object.assign({}, state, { edit: edit });
+}
+
+function setDate(state: UiState, date: Date) {
+  const edit = Object.assign({}, state.edit, { date: date });
+  return Object.assign({}, state, { edit: edit });
+}
+  
 
 function uiState(state = initialUiState, action: Action) {
   switch (action.type) {
     case ActionType.AddToTeam:
-      return state.updateIn(["edit", action.team], list => list.push(action.name));
+      return addToTeam(state, action.team, action.name);
     case ActionType.SetResult:
-      return state.setIn(["edit", "result"], action.result);
+      return setResult(state, action.result);
     case ActionType.SetDate:
-      return state.setIn(["edit", "date"], action.date);
+      return setDate(state, action.date);
     case ActionType.SetMetric:
-      return state.setIn(["dashboard", action.axis, "metric"], action.metric);
+      return updateDashboard(state, action.axis, 'metric', action.metric);
     case ActionType.ToggleWindows:
-      return toggle(state, action.axis, "windows");
+      return updateDashboard(state, action.axis, 'windows', action.state);
     case ActionType.SetWindowSize:
-      return state.setIn(["dashboard", action.axis, "windowSize"], action.size);
-    case ActionType.ToggleEqualTeams:
-      return toggle(state, action.axis, "equalTeams");
-    case ActionType.SetTeamSize:
-      return state.setIn(["dashboard", action.axis, "teamSize"], action.size);
+      return updateDashboard(state, action.axis, 'windowSize', action.size);
+    case ActionType.ToggleFilter:
+      return updateDashboard(state, action.axis, 'filter', action.state);
+    case ActionType.SetFilter:
+      return updateDashboard(state, action.axis, 'filterValue', action.filter);
     case ActionType.ToggleRecentGames:
-      return toggle(state, action.axis, "recentGames");
+      return updateDashboard(state, action.axis, 'recentGames', action.state);
     case ActionType.SetRecentGameCount:
-      return state.setIn(["dashboard", action.axis, "recentGameCount"], action.count);
+      return updateDashboard(state, action.axis, 'recentGameCount', action.count);
     case ActionType.Navigate:
-      return state.set("activePage", action.page);
+      return Object.assign({}, state, { activePage: action.page });
     default:
       return state;
   }

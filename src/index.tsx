@@ -29,7 +29,7 @@ const store = createStore(
 store.dispatch<any>(setupFirebaseConnection());
 
 const Pages = connect(
-  (state: { uiState: UiState }) => ({ activePage: state.uiState.get('activePage') as Page })
+  (state: { uiState: UiState }) => ({ activePage: state.uiState.activePage })
 )(({ activePage }: { activePage: Page }) => {
   switch (activePage) {
     case Page.Dashboard:

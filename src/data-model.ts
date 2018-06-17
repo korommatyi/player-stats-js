@@ -1,4 +1,4 @@
-import { Map as IMap, List } from "immutable"
+import { List } from 'immutable';
 
 export enum ActionType {
   AddToTeam,
@@ -8,8 +8,8 @@ export enum ActionType {
   SetMetric,
   ToggleWindows,
   SetWindowSize,
-  ToggleEqualTeams,
-  SetTeamSize,
+  ToggleFilter,
+  SetFilter,
   ToggleRecentGames,
   SetRecentGameCount,
   Navigate,
@@ -60,16 +60,16 @@ export enum Filter {
   ThreeVsThree = '3 vs. 3',
 }
 
-export const initialUiState = IMap({
+export const initialUiState = {
   activePage: Page.Dashboard,
-  edit: IMap({
-    [Team.A]: List(),
-    [Team.B]: List(),
+  edit: {
+    [Team.A]: List([]),
+    [Team.B]: List([]),
     result: Result.TeamAWon,
     date: new Date()
-  }),
-  dashboard: IMap({
-    [Axis.X]: IMap({
+  },
+  dashboard: {
+    [Axis.X]: {
       metric: Metric.Time,
       windows: false,
       windowSize: 6,
@@ -77,15 +77,15 @@ export const initialUiState = IMap({
       filterValue: Filter.Equal,
       recentGames: false,
       recentGameCount: 10
-    }),
-    [Axis.Y]: IMap({
+    },
+    [Axis.Y]: {
       metric: Metric.EloRating,
       windows: false,
       windowSize: 6,
       filter: true,
       filterValue: Filter.Equal
-    })
-  })
-});
+    }
+  }
+};
 
 export type UiState = typeof initialUiState;
