@@ -8,7 +8,7 @@ const empty = new Map<number, Record>();
 function rawData(state: Data = empty, action: Action) {
   switch (action.type) {
     case ActionType.SetRawData:
-      return action.data
+      return new Map(Object.entries(action.data))
     default:
       return state
   }
