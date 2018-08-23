@@ -29,8 +29,8 @@ export enum Result {
 }
 
 export enum Axis {
-  X,
-  Y,
+  X = 'X',
+  Y = 'Y',
 }
 
 export enum Metric {
@@ -89,3 +89,5 @@ export const initialUiState = {
 };
 
 export type UiState = typeof initialUiState;
+export type YState = typeof initialUiState.dashboard[Axis.Y];
+export type XState = typeof initialUiState.dashboard[Axis.X];

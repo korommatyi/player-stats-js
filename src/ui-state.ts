@@ -37,9 +37,42 @@ interface ValueRef {
   remove: () => void
 }
 
-export class GamesStore {
+export enum Axis {
+  X = 'X',
+  Y = 'Y',
+}
+
+export enum Metric {
+  WinRate = "Win rate",
+  EloRating = "Élő rating",
+  Time = "Time",
+}
+
+export enum Filter {
+  Equal = 'Teams of equal size',
+  FourVsFour = '4 vs. 4',
+  ThreeVsThree = '3 vs. 3',
+}
+
+class AxisOptions {
+  metric: Metric
+  windows = false
+  windowSize = 6
+  filter = true
+  filterValue = Filter.Equal
+  recentGames = false
+  recentGameCount = 10
+
+  constructor(m: Metric) {
+    this.metric = m;
+  }
+}
+
+export class UIState {
   private valueRef: ValueRef
   @observable games: Games = new Map();
+  @observable [Axis.X] = new AxisOptions(Metric.Time)
+  @observable [Axis.Y] = new AxisOptions(Metric.EloRating)
 
   constructor(valueRef: ValueRef) {
     this.valueRef = valueRef;
@@ -75,5 +108,4 @@ export class GamesStore {
     }
     return n;
   }
-
 }

@@ -1,4 +1,4 @@
-import { GamesStore, Games, Result, Team } from '../src/games-store'
+import { UIState, Games, Result, Team } from '../src/ui-state'
 
 class ValueRefMock {
   private data = {};
@@ -54,7 +54,7 @@ test('ValueRefMock', () => {
 });
 
 test('addGame works', () => {
-  const store = new GamesStore(new ValueRefMock());
+  const store = new UIState(new ValueRefMock());
   const record = {
     date: '2018-08-02',
     result: Result.TeamAWon,
@@ -69,7 +69,7 @@ test('addGame works', () => {
 });
 
 test('removeGame works', () => {
-  const store = new GamesStore(new ValueRefMock());
+  const store = new UIState(new ValueRefMock());
   const record1 = {
     date: '2018-08-02',
     result: Result.TeamAWon,
@@ -93,7 +93,7 @@ test('removeGame works', () => {
 });
 
 test('updateGame works', () => {
-  const store = new GamesStore(new ValueRefMock());
+  const store = new UIState(new ValueRefMock());
   const record = {
     date: '2018-08-02',
     result: Result.TeamAWon,
@@ -114,7 +114,7 @@ test('updateGame works', () => {
 });
 
 test('names works', () => {
-  const store = new GamesStore(new ValueRefMock());
+  const store = new UIState(new ValueRefMock());
   const record1 = {
     date: '2018-08-02',
     result: Result.TeamAWon,
