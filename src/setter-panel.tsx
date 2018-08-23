@@ -44,8 +44,9 @@ class NumField extends React.Component<NumFieldProps, { value: string, error: bo
 
   onChange(newValue: string) {
     const valueNum = Number(newValue);
-    this.setState({ value: newValue, error: !valueNum });
-    if (valueNum) {
+    const valid = !!valueNum && valueNum > 0;
+    this.setState({ value: newValue, error: !valid });
+    if (valid) {
       this.props.onChange(valueNum);
     }
   }
@@ -135,7 +136,7 @@ function metricOptions(props: AxisSetterProps) {
 
 const AxisSetter = (props: AxisSetterProps) => (
   <Card style={styles.axisSetter}>
-    <CardHeader title={isX(props) ? 'Y - axis' : 'X - axis'} avatar={<Icon>tune</Icon>}/>
+    <CardHeader title={isX(props) ? 'X - axis' : 'Y - axis'} avatar={<Icon>tune</Icon>}/>
     <CardContent>
       <Select value={props.metric} style={{minWidth: '20em'}}
               onChange={ event => props.onMetricChange(event.target.value as Metric) }>
