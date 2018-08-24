@@ -1,10 +1,12 @@
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import { Provider } from "mobx-react";
-import AppBar from "./app-bar";
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { Provider, inject, observer } from 'mobx-react';
+import AppBar from './app-bar';
+import Games from './game-list';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
-import { Page, UIState } from "./ui-state";
+import { Page, UIState } from './ui-state';
+import { init, gamesRef } from './firebase';
 
 const theme = createMuiTheme({
   palette: {
@@ -12,29 +14,33 @@ const theme = createMuiTheme({
   },
 });
 
-/* const Pages = connect(
- *   (state: { uiState: UiState }) => ({ activePage: state.uiState.activePage })
- * )(({ activePage }: { activePage: Page }) => {
- *   switch (activePage) {
- *     case Page.Dashboard:
- *       return <Dashboard/>
- *     case Page.Edit:
- *       return <div/>
- *     case Page.List:
- *       return <Games/>
- *     default:
- *       return <div/>
- *   }}) */;
+@inject('uiState')
+@observer
+class Pages extends React.Component {
+  render() {
+    switch (this.props.uiState.page) {
+      case Page.Dashboard:
+        return <div/>
+      case Page.Edit:
+        return <div/>
+      case Page.List:
+        return <Games/>
+      default:
+        return <div/>
+    }}
+}
 
-const uiState = new UIState({ on: (a, b) => console.log(a, b) });
+init();
+const uiState = new UIState(gamesRef());
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <Provider uiState={uiState}>
       <div>
         <AppBar/>
+        <Pages/>
       </div>
     </Provider>
   </MuiThemeProvider>,
-  document.getElementById("app")
+  document.getElementById('app')
 );

@@ -26,7 +26,7 @@ function reductions(records: Record[], update: (a: Rating, r: Record) => Rating,
 
 export function winRate(records: Record[], names: string[]) {
   type Stat = { played: number, won: number };
-  const init = new Map(names.map((n: string) => [n, { played: 0, won: 0 }]));
+  const init = Map(names.map((n: string) => [n, { played: 0, won: 0 }]));
   const update = (accumulator: Map<string, Stat>,
                   currentValue: Record) => {
                     const teamAGain = teamAWinScore(currentValue);
@@ -50,7 +50,7 @@ function teamRating(ratings: Map<string, number>, team: string[]) {
 }
 
 export function eloRating(records: Record[], names: string[]) {
-  const init = new Map(names.map((n: string) => [n, 1500]));
+  const init = Map(names.map((n: string) => [n, 1500]));
   const update = (accumulator: Map<string, number>, currentValue: Record) => {
     const { [Team.A]: teamA, [Team.B]: teamB } = currentValue;
     const averageTeamSize = (teamA.length + teamB.length) / 2;
@@ -93,7 +93,7 @@ export function transpose(ratings: Rating[]): TransposedRating {
   if (ratings.length == 0) {
     return [];
   }
-  const init = new Map(ratings[0].map(_ => []));
+  const init = Map(ratings[0].map(_ => []));
   const update = (accumulator: Map<string, number[]>, currentValue: Rating) =>
     accumulator.mergeWith((a: number[], b: number) => a.concat([b]), currentValue);
   const t = ratings.reduce(update, init);

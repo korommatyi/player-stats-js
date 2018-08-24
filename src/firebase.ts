@@ -1,13 +1,12 @@
-import * as firebase from "firebase"
-import { Data } from "./data-model"
+import * as firebase from 'firebase'
 
 const config = {
-  apiKey: "AIzaSyC3J1d0aIsil-MVtWbDNzVVGXO0tPrnQgw",
-  authDomain: "c99-foci-stats.firebaseapp.com",
-  databaseURL: "https://c99-foci-stats.firebaseio.com",
-  projectId: "c99-foci-stats",
-  storageBucket: "c99-foci-stats.appspot.com",
-  messagingSenderId: "439716566573"
+  apiKey: 'AIzaSyC3J1d0aIsil-MVtWbDNzVVGXO0tPrnQgw',
+  authDomain: 'c99-foci-stats.firebaseapp.com',
+  databaseURL: 'https://c99-foci-stats.firebaseio.com',
+  projectId: 'c99-foci-stats',
+  storageBucket: 'c99-foci-stats.appspot.com',
+  messagingSenderId: '439716566573'
 };
 
 export function init() {
@@ -20,8 +19,4 @@ export function init() {
   });
 }
 
-export function onDataChange(fn: (data: Data) => void) {
-  const db = firebase.database();
-  const results = db.ref("/results");
-  results.on("value", snapshot => fn(snapshot.val()));
-}
+export const gamesRef = () => firebase.database().ref('results');

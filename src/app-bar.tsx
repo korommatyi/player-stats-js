@@ -9,7 +9,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Page, UiState } from './ui-state';
+import { Page } from './ui-state';
 import { observer, inject } from 'mobx-react';
 
 const styles = {

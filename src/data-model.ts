@@ -16,4 +16,4 @@ export interface Record {
   [Team.B]: string[]
 }
 
-export type Games = Map<number, Record>;
+export type Games = Map<string, Record>;

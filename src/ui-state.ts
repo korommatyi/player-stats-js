@@ -13,8 +13,8 @@ function normalizeRecord(r: Record) {
 }
 
 interface ValueRef {
-  on: (eventType: string, callback: (snapshot: Any) => void) => void
-  set: (value: Any) => void
+  on: (eventType: string, callback: (snapshot: any) => void) => void
+  set: (value: any) => void
   ref: (path: string) => ValueRef
   remove: () => void
 }
@@ -99,7 +99,12 @@ export class UIState {
   }
 
   @computed get sortedGames() {
-    return Array.from(this.games.values()).sort((a: Record, b: Record) => a.date > b.date);
+    return Array.from(this.games.values())
+                .sort((a: Record, b: Record) => a.date.localeCompare(b.date));
+  }
+
+  @computed get reverseSortedGamesWithKeys() {
+    return Array.from(this.games).sort(reverseDateSorter);
   }
 
   @computed get filteredSortedGamesX() {
@@ -119,14 +124,18 @@ export class UIState {
   }
 }
 
+function reverseDateSorter(a: [string, Record], b: [string, Record]) {
+  return b[1].date.localeCompare(a[1].date);
+}
+
 function metricFn(metric: Metric) {
   switch (metric) {
     case Metric.EloRating:
       return eloRating;
     case Metric.WinRate:
-      return winRage
+      return winRate;
     default:
-      throw new RuntimeException(`Unknown metric ${metric}`);
+      throw `Unknown metric ${metric}`;
   }
 }
 
