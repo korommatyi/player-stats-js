@@ -137,3 +137,23 @@ test('names works', () => {
   expect(names.has('c')).toBe(true);
   expect(names.has('d')).toBe(true);
 });
+
+test('sortedGames works', () => {
+  const store = new UIState(new ValueRefMock());
+  const record1 = {
+    date: '2018-08-04',
+    result: Result.TeamAWon,
+    [Team.A]: ['a', 'b'],
+    [Team.B]: [],
+  };
+  const record2 = {
+    date: '2018-08-03',
+    result: Result.TeamAWon,
+    [Team.A]: ['a', 'c'],
+    [Team.B]: ['d'],
+  };
+  store.addGame(record1);
+  store.addGame(record2);
+  const sorted = store.sortedGames;
+  expect(sorted[0].date).toBe('2018-08-03');
+});

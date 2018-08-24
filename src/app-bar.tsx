@@ -9,9 +9,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Page, UiState } from './data-model';
-import {navigate } from './actions';
-import { connect } from 'react-redux';
+import { Page, UiState } from './ui-state';
+import { observer, inject } from 'mobx-react';
 
 const styles = {
   root: {
@@ -26,24 +25,10 @@ const styles = {
   },
 };
 
-interface PageItemProps {
-  icon: string,
-  page: Page,
-  onClick: (page: Page) => void,
-}
-
-class PageItem extends React.Component<PageItemProps, {}> {
-  constructor(props: PageItemProps) {
-    super(props);
-  }
-
-  onClick() {
-    this.props.onClick(this.props.page);
-  }
-
+class PageItem extends React.Component {
   render() {
     return (
-      <ListItem button onClick={this.onClick.bind(this)}>
+      <ListItem button onClick={() => this.props.onClick(this.props.page)}>
         <ListItemIcon>
           <Icon>{this.props.icon}</Icon>
         </ListItemIcon>
@@ -53,41 +38,19 @@ class PageItem extends React.Component<PageItemProps, {}> {
   }
 }
 
-interface HeaderStateProps {
-  activePage: Page,
-}
-
-interface HeaderDispatchProps {
-  onSelect: (newPage: Page) => void,
-}
-
-type HeaderProps = HeaderStateProps & HeaderDispatchProps;
-
-interface HeaderState {
-  open: boolean
-}
-
-class Header extends React.Component<HeaderProps, HeaderState> {
-  constructor(props: HeaderProps) {
+@inject('uiState')
+@observer
+export default class Header extends React.Component {
+  constructor(props) {
     super(props);
     this.state = { open: false };
-    this.toggleMenu = this.toggleMenu.bind(this);
-    this.closeDrawer = this.closeDrawer.bind(this);
-    this.selectPage = this.selectPage.bind(this);
   }
 
-  toggleMenu() {
-    this.setState((prevState) => {
-      return { open: !prevState.open }
-    })
-  }
+  toggleMenu = () => this.setState(prevState => ({ open: !prevState.open }));
+  closeDrawer = () => this.setState({ open: false });
 
-  closeDrawer() {
-    this.setState({ open: false});
-  }
-
-  selectPage(page: Page) {
-    this.props.onSelect(page);
+  selectPage = (page: Page) => {
+    this.props.uiState.page = page;
     this.closeDrawer();
   }
 
@@ -101,7 +64,7 @@ class Header extends React.Component<HeaderProps, HeaderState> {
               <Icon>menu</Icon>
             </IconButton>
             <Typography variant="title" color="inherit" style={styles.flex}>
-              {this.props.activePage}
+              {this.props.uiState.page}
             </Typography>
           </Toolbar>
         </AppBar>
@@ -121,8 +84,3 @@ class Header extends React.Component<HeaderProps, HeaderState> {
     );
   }
 }
-
-export default connect<HeaderStateProps, HeaderDispatchProps>(
-  (state: { uiState: UiState }) => ({ activePage: (state.uiState.activePage) }),
-  (dispatch) => ({ onSelect: (newPage: Page) => dispatch(navigate(newPage)) })
-)(Header);

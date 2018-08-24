@@ -1,6 +1,7 @@
 import { observable, runInAction, computed } from 'mobx';
 import { Team, Result, Games, Record } from './data-model';
 import * as hash from 'object-hash';
+import { winRate, eloRating, windowed, transpose } from './metrics';
 
 function normalizeRecord(r: Record) {
   return {
@@ -49,9 +50,16 @@ class AxisOptions {
   }
 }
 
+export enum Page {
+  Dashboard = 'Dashboard',
+  Edit = 'New Game',
+  List = 'Games',
+}
+
 export class UIState {
   private valueRef: ValueRef
   @observable games: Games = new Map();
+  @observable page: Page = Page.Dashboard;
   @observable [Axis.X] = new AxisOptions(Metric.Time)
   @observable [Axis.Y] = new AxisOptions(Metric.EloRating)
 
@@ -89,4 +97,66 @@ export class UIState {
     }
     return n;
   }
+
+  @computed get sortedGames() {
+    return Array.from(this.games.values()).sort((a: Record, b: Record) => a.date > b.date);
+  }
+
+  @computed get filteredSortedGamesX() {
+    return filteredGames(this[Axis.X].filter, this[Axis.X].filterValue, this.sortedGames);
+  }
+
+  @computed get filteredSortedGamesY() {
+    return filteredGames(this[Axis.Y].filter, this[Axis.Y].filterValue, this.sortedGames);
+  }
+
+  @computed get chartType() {
+    if (this[Axis.X].metric == Metric.Time) {
+      return 'scatter';
+    } else {
+      return 'line';
+    }
+  }
 }
+
+function metricFn(metric: Metric) {
+  switch (metric) {
+    case Metric.EloRating:
+      return eloRating;
+    case Metric.WinRate:
+      return winRage
+    default:
+      throw new RuntimeException(`Unknown metric ${metric}`);
+  }
+}
+
+function teamSizeFilter(size: number) {
+  return (record: Record) => record[Team.A].length == size && record[Team.B].length == size;
+}
+
+const filters = {
+  [Filter.Equal]: (record: Record) => record[Team.A].length == record[Team.B].length,
+  [Filter.FourVsFour]: teamSizeFilter(4),
+  [Filter.FourVsFour]: teamSizeFilter(3)
+};
+
+function filteredGames(filter: boolean, filterValue: Filter, games: Record[]) {
+  if (filter) {
+    return games.filter(filters[filterValue]);
+  } else {
+    return games;
+  }
+}
+
+/* function ratings(data: Data, axisStat: XState | YState, names: string[]) {
+ *   const metric = metricFn(axisStat.metric);
+ *   let records = data.values();
+ *   if (axisStat.filter) {
+ *     records = data.filter(filters[axisStat.filterValue]);
+ *   }
+ *   const sortedRecords = records.sort((r1: Record, r2: Record) => r1.date.localCompare(r2.date));
+ *   if (axisStat.windows) {
+ *     return transpose(windowed(sortedRecords, axis.windowSize, metric, names));
+ *   }
+ *   return transpose(metric(sortedRecords, names));
+ * } */

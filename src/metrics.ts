@@ -100,37 +100,3 @@ export function transpose(ratings: Rating[]): TransposedRating {
   return t.entrySeq().toArray()
           .map(([name, data]: [string, number[]]) => ({ label: name, data: data }));
 }
-
-/* function metricFn(metric: Metric) {
- *   switch (metric) {
- *     case Metric.EloRating:
- *       return eloRating;
- *     case Metric.WinRate:
- *       return winRage
- *     default:
- *       throw new RuntimeException(`Unknown metric ${metric}`);
- *   }
- * }
- * 
- * function teamSizeFilter(size: number) {
- *   return (record: Record) => record[Team.A].length == size && record[Team.B].length == size;
- * }
- * 
- * const filters = {
- *   [Filter.Equal]: (record: Record) => record[Team.A].length == record[Team.B].length,
- *   [Filter.FourVsFour]: teamSizeFilter(4),
- *   [Filter.FourVsFour]: teamSizeFilter(3)
- * };
- * 
- * function ratings(data: Data, axisStat: XState | YState, names: string[]) {
- *   const metric = metricFn(axisStat.metric);
- *   let records = data.values();
- *   if (axisStat.filter) {
- *     records = data.filter(filters[axisStat.filterValue]);
- *   }
- *   const sortedRecords = records.sort((r1: Record, r2: Record) => r1.date.localCompare(r2.date));
- *   if (axisStat.windows) {
- *     return transpose(windowed(sortedRecords, axis.windowSize, metric, names));
- *   }
- *   return transpose(metric(sortedRecords, names));
- * } */
