@@ -1,4 +1,4 @@
-import { Record, Result, Team } from './ui-state'
+import { Record, Result, Team } from './data-model'
 import { Map } from 'immutable';
 
 const teamAWinScore = (record: Record) => {

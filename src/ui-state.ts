@@ -1,23 +1,6 @@
 import { observable, runInAction, computed } from 'mobx';
+import { Team, Result, Games, Record } from './data-model';
 import * as hash from 'object-hash';
-
-export enum Team {
-  A = "team-a",
-  B = "team-b",
-}
-
-export enum Result {
-  TeamAWon = "team-a-won",
-  TeamBWon = "team-b-won",
-  Draw = "draw",
-}
-
-export interface Record {
-  date: string,
-  result: Result,
-  [Team.A]: string[],
-  [Team.B]: string[]
-}
 
 function normalizeRecord(r: Record) {
   return {
@@ -27,8 +10,6 @@ function normalizeRecord(r: Record) {
     [Team.B]: r[Team.B].slice().sort()
   }
 }
-
-export type Games = Map<string, Record>;
 
 interface ValueRef {
   on: (eventType: string, callback: (snapshot: Any) => void) => void

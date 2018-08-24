@@ -1,4 +1,5 @@
-import { UIState, Games, Result, Team } from '../src/ui-state'
+import { UIState } from '../src/ui-state';
+import { Games, Result, Team } from '../src/data-model';
 
 class ValueRefMock {
   private data = {};

@@ -1,5 +1,5 @@
 import { winRate, eloRating, windowed, transpose } from '../src/metrics'
-import { Record, Result, Team } from '../src/ui-state'
+import { Record, Result, Team } from '../src/data-model'
 
 const records = [
   {
