@@ -70,37 +70,38 @@ export function eloRating(records: Record[], names: string[]) {
   return reductions(records, update, init).slice(1);
 }
 
-/* function windows(records: Record[], windowSize: number): Record[][] {
- *   if (windowSize > records.length) {
- *     return [records.slice(0)];
- *   }
- *   const wins = []
- *   for (let start = 0; start <= records.length - windowSize; ++start) {
- *     wins.push(records.slice(start, start + windowSize));
- *   }
- *   return wins;
- * }
- * 
- * function windowed(records: Record[], windowSize: number, metric: MetricCalculator, names: string[]) {
- *   const recordWindows = windows(records, windowSize);
- *   return recordWindows.map((rs: Record[]) => metric(rs, names).slice(-1)[0])
- * }
- * 
- * type TransposedRating = { label: string, data: number[] }[]
- * 
- * function transpose(ratings: Rating[]): TransposedRating {
- *   if (ratings.length == 0) {
- *     return [];
- *   }
- *   const init = new Map(ratings[0].keys().map((n: string) => [n, []]));
- *   const update = (accumulator: Map<string, number[]>, currentValue: Rating) =>
- *     accumulator.mergeWith((a: number[], b: number) => a.push(b), currentValue);
- *   const t = ratings.reduce(update, init);
- *   return Array.from(t.entries()
- *                      .map(([name, data]: [string, number[]]) => { label: name, data: data }));
- * }
- * 
- * function metricFn(metric: Metric) {
+function windows(records: Record[], windowSize: number): Record[][] {
+  if (windowSize > records.length) {
+    return [records.slice(0)];
+  }
+  const wins = [];
+  for (let start = 0; start <= records.length - windowSize; ++start) {
+    wins.push(records.slice(start, start + windowSize));
+  }
+  return wins;
+}
+
+export function windowed(records: Record[], windowSize: number, metric: MetricCalculator,
+                         names: string[]) {
+  const recordWindows = windows(records, windowSize);
+  return recordWindows.map((rs: Record[]) => metric(rs, names).slice(-1)[0]);
+}
+
+type TransposedRating = { label: string, data: number[] }[];
+
+export function transpose(ratings: Rating[]): TransposedRating {
+  if (ratings.length == 0) {
+    return [];
+  }
+  const init = new Map(ratings[0].map(_ => []));
+  const update = (accumulator: Map<string, number[]>, currentValue: Rating) =>
+    accumulator.mergeWith((a: number[], b: number) => a.concat([b]), currentValue);
+  const t = ratings.reduce(update, init);
+  return t.entrySeq().toArray()
+          .map(([name, data]: [string, number[]]) => ({ label: name, data: data }));
+}
+
+/* function metricFn(metric: Metric) {
  *   switch (metric) {
  *     case Metric.EloRating:
  *       return eloRating;
