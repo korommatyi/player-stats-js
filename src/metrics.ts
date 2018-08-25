@@ -1,5 +1,5 @@
 import { Record, Result, Team } from './data-model'
-import { Map } from 'immutable';
+import { Map, Seq } from 'immutable';
 
 const teamAWinScore = (record: Record) => {
   switch (record.result) {
@@ -66,8 +66,8 @@ export function eloRating(records: Record[], names: string[]) {
     const k = 32 * averageTeamSize;
     const aGain = k * (sA - eA) / teamA.length;
     const bGain = k * (sB - eB) / teamB.length;
-    const scores = teamA.map((n: string) => [n, aGain])
-                        .concat(teamB.map((n: string) => [n, bGain]));
+    const scores: Seq<string, number> = Seq.Keyed(teamA.map((n: string) => [n, aGain])
+                                                       .concat(teamB.map((n: string) => [n, bGain])));
     return accumulator.mergeWith((a: number, b: number) => a + b, scores);
   }
   return reductions(records, update, init).slice(1);
