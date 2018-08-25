@@ -8,7 +8,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Switch from '@material-ui/core/Switch';
 import TextField from '@material-ui/core/TextField';
 import { createStyles } from '@material-ui/core/styles';
-import { Filter, Metric, Axis, UIState } from './ui-state';
+import { Filter, Metric, Axis, UIState, AxisOptions } from './ui-state';
 import { inject, observer } from 'mobx-react';
 import { observable, action } from 'mobx';
 
@@ -112,33 +112,40 @@ function metricOptions(axis: Axis) {
   return axis == Axis.X ? Object.values(Metric) : [Metric.EloRating, Metric.WinRate];
 }
 
+type AxisSetterProps = { uiState?: UIState, axis: Axis };
 
 @inject('uiState')
 @observer
-class AxisSetter extends React.Component<{ uiState: UIState, axis: Axis }> {
+class AxisSetter extends React.Component<AxisSetterProps> {
+  options: AxisOptions
+
+  constructor(props: AxisSetterProps) {
+    super(props);
+    this.options = props.uiState![this.props.axis];
+  }
+
   render() {
-    const options = this.props.uiState[this.props.axis];
     return (
       <Card style={styles.axisSetter}>
         <CardHeader title={this.props.axis == Axis.X ? 'X - axis' : 'Y - axis'}
                     avatar={<Icon>tune</Icon>}/>
         <CardContent>
-          <Select value={options.metric} style={{minWidth: '20em'}}
-                  onChange={ event => options.metric = (event.target.value as Metric) }>
+          <Select value={this.options.metric} style={{minWidth: '20em'}}
+                  onChange={ event => this.options.metric = (event.target.value as Metric) }>
             { metricOptions(this.props.axis).map(t => <MenuItem value={t} key={t}>{t}</MenuItem>) }
           </Select>
-          { (options.metric == Metric.Time) ? (
-              <LastGamesSetter on={options.recentGames} value={options.recentGameCount}
-                               onToggle={() => options.recentGames = !options.recentGames}
-                               onValueChange={v => options.recentGameCount = v} />
+          { (this.options.metric == Metric.Time) ? (
+              <LastGamesSetter on={this.options.recentGames} value={this.options.recentGameCount}
+                               onToggle={() => this.options.recentGames = !this.options.recentGames}
+                               onValueChange={v => this.options.recentGameCount = v} />
           ) : (
               <div>
-                <FilterSetter on={options.filter} value={options.filterValue}
-                              onToggle={() => options.filter = !options.filter}
-                              onValueChange={v => options.filterValue = v}/>
-                <WindowSetter on={options.windows} value={options.windowSize}
-                              onToggle={() => options.windows = !options.windows}
-                              onValueChange={v => options.windowSize = v} />
+                <FilterSetter on={this.options.filter} value={this.options.filterValue}
+                              onToggle={() => this.options.filter = !this.options.filter}
+                              onValueChange={v => this.options.filterValue = v}/>
+                <WindowSetter on={this.options.windows} value={this.options.windowSize}
+                              onToggle={() => this.options.windows = !this.options.windows}
+                              onValueChange={v => this.options.windowSize = v} />
               </div>
           ) }
         </CardContent>

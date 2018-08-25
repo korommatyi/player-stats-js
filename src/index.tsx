@@ -18,8 +18,15 @@ const theme = createMuiTheme({
 @inject('uiState')
 @observer
 class Pages extends React.Component<UIStateProp> {
+  uiState: UIState
+
+  constructor(props: UIStateProp) {
+    super(props);
+    this.uiState = props.uiState!;
+  }
+
   render() {
-    switch (this.props.uiState.page) {
+    switch (this.uiState.page) {
       case Page.Dashboard:
         return <Dashboard/>
       case Page.Edit:

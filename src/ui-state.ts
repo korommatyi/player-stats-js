@@ -36,7 +36,7 @@ export enum Filter {
   ThreeVsThree = '3 vs. 3',
 }
 
-class AxisOptions {
+export class AxisOptions {
   @observable metric: Metric
   @observable windows = false
   @observable windowSize = 6
@@ -124,7 +124,7 @@ export class UIState {
   }
 }
 
-export type UIStateProp = { uiState: UIState };
+export type UIStateProp = { uiState?: UIState };
 
 function reverseDateSorter(a: [string, Record], b: [string, Record]) {
   return b[1].date.localeCompare(a[1].date);
