@@ -11,6 +11,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { Page, UIStateProp } from './ui-state';
 import { observer, inject } from 'mobx-react';
+import { observable, action } from 'mobx';
 
 const styles = {
   root: {
@@ -37,18 +38,13 @@ const PageItem = (props: { onClick: (page: Page) => void, icon: string, page: Pa
 
 @inject('uiState')
 @observer
-export default class Header extends React.Component<UIStateProp, { open: boolean }> {
-  constructor(props: UIStateProp) {
-    super(props);
-    this.state = { open: false };
-  }
+export default class Header extends React.Component<UIStateProp> {
+  @observable open = false;
 
-  toggleMenu = () => this.setState(prevState => ({ open: !prevState.open }));
-  closeDrawer = () => this.setState({ open: false });
-
-  selectPage = (page: Page) => {
+  @action.bound
+  selectPage(page: Page) {
     this.props.uiState.page = page;
-    this.closeDrawer();
+    this.open = false;
   }
 
   render() {
@@ -57,7 +53,7 @@ export default class Header extends React.Component<UIStateProp, { open: boolean
         <AppBar position="static">
           <Toolbar>
             <IconButton style={styles.menuButton} color="inherit" aria-label="Menu"
-                        onClick={this.toggleMenu}>
+                        onClick={() => this.open = !this.open}>
               <Icon>menu</Icon>
             </IconButton>
             <Typography variant="title" color="inherit" style={styles.flex}>
@@ -65,11 +61,11 @@ export default class Header extends React.Component<UIStateProp, { open: boolean
             </Typography>
           </Toolbar>
         </AppBar>
-        <Drawer anchor="left" open={this.state.open} onClick={this.closeDrawer}>
+        <Drawer anchor="left" open={this.open} onClick={() => this.open = false}>
           <div tabIndex={0}
                role="button"
-               onClick={this.closeDrawer}
-               onKeyDown={this.closeDrawer}>
+               onClick={() => this.open = false}
+               onKeyDown={() => this.open = false}>
             <List>
               <PageItem icon="equalizer" page={Page.Dashboard} onClick={this.selectPage}/>
               <PageItem icon="add circle" page={Page.Edit} onClick={this.selectPage}/>
