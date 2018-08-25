@@ -3,6 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { Provider, inject, observer } from 'mobx-react';
 import AppBar from './app-bar';
 import Games from './game-list';
+import Dashboard from './dashboard';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { Page, UIState, UIStateProp } from './ui-state';
@@ -20,7 +21,7 @@ class Pages extends React.Component<UIStateProp> {
   render() {
     switch (this.props.uiState.page) {
       case Page.Dashboard:
-        return <div/>
+        return <Dashboard/>
       case Page.Edit:
         return <div/>
       case Page.List:

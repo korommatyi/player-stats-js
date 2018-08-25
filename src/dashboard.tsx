@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
 import { Line, Scatter } from 'react-chartjs-2';
 import SetterPanel from './setter-panel';
 import Card from '@material-ui/core/Card';

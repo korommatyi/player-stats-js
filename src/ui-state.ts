@@ -37,13 +37,13 @@ export enum Filter {
 }
 
 class AxisOptions {
-  metric: Metric
-  windows = false
-  windowSize = 6
-  filter = true
-  filterValue = Filter.Equal
-  recentGames = false
-  recentGameCount = 10
+  @observable metric: Metric
+  @observable windows = false
+  @observable windowSize = 6
+  @observable filter = true
+  @observable filterValue = Filter.Equal
+  @observable recentGames = false
+  @observable recentGameCount = 10
 
   constructor(m: Metric) {
     this.metric = m;
