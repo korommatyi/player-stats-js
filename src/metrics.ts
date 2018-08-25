@@ -32,14 +32,15 @@ export function winRate(records: Record[], names: string[]) {
                     const teamAGain = teamAWinScore(currentValue);
                     const teamBGain = 1 - teamAGain;
                     const scores = currentValue[Team.A]
-                      .map((n: string) => [n, { played: 1, won: teamAGain }])
-                      .concat(currentValue[Team.B]
-                        .map((n: string) => [n, { played: 1, won: teamBGain }]));
-                    return accumulator
-                      .mergeWith((a: Stat, b: Stat) => ({ played: a.played + b.played,
-                                                          won: a.won + b.won }),
-                                 scores);
-                  }
+                      .map((n: string) => [n, teamAGain])
+                      .concat(currentValue[Team.B].map((n: string) => [n, teamBGain]));
+                    return accumulator.withMutations(
+                      (m: Map<string, Stat>) => scores.reduce(
+                        (a: Map<string, Stat>, [k, v]: [string, number]) =>
+                          a.update(k, (s: Stat) => ({ played: s.played + 1, won: s.won + v }))
+                        , m)
+                    );
+                  };
   const stats = reductions(records, update, init).slice(1);
   const ratio = ({ played, won }: { played: number, won: number }) => played ? won / played : 0;
   return stats.map((r: Map<string, Stat>) => r.map(ratio));
