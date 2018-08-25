@@ -124,6 +124,8 @@ export class UIState {
   }
 }
 
+export type UIStateProp = { uiState: UIState };
+
 function reverseDateSorter(a: [string, Record], b: [string, Record]) {
   return b[1].date.localeCompare(a[1].date);
 }
@@ -146,7 +148,7 @@ function teamSizeFilter(size: number) {
 const filters = {
   [Filter.Equal]: (record: Record) => record[Team.A].length == record[Team.B].length,
   [Filter.FourVsFour]: teamSizeFilter(4),
-  [Filter.FourVsFour]: teamSizeFilter(3)
+  [Filter.ThreeVsThree]: teamSizeFilter(3)
 };
 
 function filteredGames(filter: boolean, filterValue: Filter, games: Record[]) {

@@ -8,6 +8,7 @@ import Icon from '@material-ui/core/Icon';
 import { Team, Record } from './data-model';
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
+import { UIStateProp } from './ui-state';
 
 function resultIcon(r: string): string {
   switch (r) {
@@ -31,7 +32,7 @@ const Row = ({ r }: { r: Record }) => (
 
 @inject('uiState')
 @observer
-export default class GamesList extends React.Component {
+export default class GamesList extends React.Component<UIStateProp> {
   render() {
     return (
       <Paper>
@@ -47,7 +48,7 @@ export default class GamesList extends React.Component {
           <TableBody>
             {
               this.props.uiState.reverseSortedGamesWithKeys
-                  .map(([k, v]: [number, Record]) => (
+                  .map(([k, v]: [string, Record]) => (
                     <Row key={k} r={v}/>
                   ))
             }

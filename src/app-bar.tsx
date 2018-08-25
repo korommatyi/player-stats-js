@@ -9,7 +9,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Page } from './ui-state';
+import { Page, UIStateProp } from './ui-state';
 import { observer, inject } from 'mobx-react';
 
 const styles = {
@@ -25,23 +25,20 @@ const styles = {
   },
 };
 
-class PageItem extends React.Component {
-  render() {
-    return (
-      <ListItem button onClick={() => this.props.onClick(this.props.page)}>
-        <ListItemIcon>
-          <Icon>{this.props.icon}</Icon>
-        </ListItemIcon>
-        <ListItemText primary={this.props.page}/>
-      </ListItem>
-    );
-  }
-}
+const PageItem = (props: { onClick: (page: Page) => void, icon: string, page: Page }) => (
+  <ListItem button onClick={() => props.onClick(props.page)}>
+    <ListItemIcon>
+      <Icon>{props.icon}</Icon>
+    </ListItemIcon>
+    <ListItemText primary={props.page}/>
+  </ListItem>
+);
+
 
 @inject('uiState')
 @observer
-export default class Header extends React.Component {
-  constructor(props) {
+export default class Header extends React.Component<UIStateProp, { open: boolean }> {
+  constructor(props: UIStateProp) {
     super(props);
     this.state = { open: false };
   }

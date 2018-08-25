@@ -5,7 +5,7 @@ import AppBar from './app-bar';
 import Games from './game-list';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
-import { Page, UIState } from './ui-state';
+import { Page, UIState, UIStateProp } from './ui-state';
 import { init, gamesRef } from './firebase';
 
 const theme = createMuiTheme({
@@ -16,7 +16,7 @@ const theme = createMuiTheme({
 
 @inject('uiState')
 @observer
-class Pages extends React.Component {
+class Pages extends React.Component<UIStateProp> {
   render() {
     switch (this.props.uiState.page) {
       case Page.Dashboard:

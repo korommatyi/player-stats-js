@@ -15,7 +15,7 @@ const teamAWinScore = (record: Record) => {
 type Rating = Map<string, number>;
 type MetricCalculator = (records: Record[], names: string[]) => Rating[];
 
-function reductions(records: Record[], update: (a: Rating, r: Record) => Rating, init: Rating) {
+function reductions<T>(records: Record[], update: (a: T, r: Record) => T, init: T) {
   const ret = [init];
   for (let record of records) {
     const lastRating = ret[ret.length - 1];
@@ -32,10 +32,12 @@ export function winRate(records: Record[], names: string[]) {
                     const teamAGain = teamAWinScore(currentValue);
                     const teamBGain = 1 - teamAGain;
                     const scores = currentValue[Team.A]
-                      .map((n: string) => [n, teamAGain])
-                      .concat(currentValue[Team.B].map((n: string) => [n, teamBGain]))
+                      .map((n: string) => [n, { played: 1, won: teamAGain }])
+                      .concat(currentValue[Team.B]
+                        .map((n: string) => [n, { played: 1, won: teamBGain }]));
                     return accumulator
-                      .mergeWith((a: Stat, b: number) => ({ played: a.played + 1, won: a.won + b }),
+                      .mergeWith((a: Stat, b: Stat) => ({ played: a.played + b.played,
+                                                          won: a.won + b.won }),
                                  scores);
                   }
   const stats = reductions(records, update, init).slice(1);
@@ -95,7 +97,8 @@ export function transpose(ratings: Rating[]): TransposedRating {
   }
   const init = Map(ratings[0].map(_ => []));
   const update = (accumulator: Map<string, number[]>, currentValue: Rating) =>
-    accumulator.mergeWith((a: number[], b: number) => a.concat([b]), currentValue);
+    accumulator.mergeWith((a: number[], b: number[]) => a.concat(b),
+                          currentValue.map((val: number) => [val]));
   const t = ratings.reduce(update, init);
   return t.entrySeq().toArray()
           .map(([name, data]: [string, number[]]) => ({ label: name, data: data }));
